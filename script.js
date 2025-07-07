@@ -1,3 +1,5 @@
+//Revisar requerimientos restantes del proyecto, esta casi terminado. Funcion de reinicio para volver a jugar
+
 
 let player1 = null;
 let player2 = null;
@@ -44,7 +46,12 @@ function Game(){
                 gameboard[a] === gameboard[b] &&
                 gameboard[a] === gameboard[c]
             ) {
-                return gameboard[a]; // "X" o "O"
+                if (gameboard[a]=== "X"){
+                    return player1.name
+                }
+                else{
+                return player2.name; // "X" o "O"
+                }
             }
         }
         return null; // no hay ganador
@@ -63,7 +70,13 @@ function Playround(game){
             const winner=game.checkWinner()
             
             if (winner){
-                display.textContent=`El jugador ${winner} ha ganado`               
+                display.textContent=`El jugador ${winner} ha ganado`
+                const botonReset = document.createElement("button");
+                botonReset.textContent = "Reiniciar juego";
+                botonReset.addEventListener("click", () => {
+                location.reload(); // recarga toda la página
+});
+document.body.appendChild(botonReset);               
             }
             else if(full){
                 display.textContent="El juego termino en empate"              
@@ -128,11 +141,11 @@ function Display(){
         const squarei=document.createElement("div")
         squarei.id="square";
         squarei.addEventListener("click", () => {
-            let playpos = i;
-            const currentPlayer = player;  // Captura el jugador actual ANTES de cambiarlo
-            playround1.playround(playpos);
-            squarei.textContent = currentPlayer.marker;  // Muestra su marcador, no el del siguiente
-        });
+    let playpos = i;
+    const currentPlayer = player;  // Captura el jugador actual ANTES de cambiarlo
+    playround1.playround(playpos);
+    squarei.textContent = currentPlayer.marker;  // Muestra su marcador, no el del siguiente
+});
         gamecontainer.appendChild(squarei);
     }
 }
