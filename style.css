@@ -20,9 +20,15 @@
     font-size: x-large;
 }
 #square{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 4rem;
+    font-weight: bold;
     height: 100px;
     width: 100px;
     background-color: rgb(219, 218, 218);
+    cursor: pointer;
 }
 input[type="text"] {
     width: 250px;

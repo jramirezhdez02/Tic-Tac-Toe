@@ -128,8 +128,10 @@ function Display(){
         const squarei=document.createElement("div")
         squarei.id="square";
         squarei.addEventListener("click", () => {
-            let playpos=i;
-            playround1.playround(playpos)          
+            let playpos = i;
+            const currentPlayer = player;  // Captura el jugador actual ANTES de cambiarlo
+            playround1.playround(playpos);
+            squarei.textContent = currentPlayer.marker;  // Muestra su marcador, no el del siguiente
         });
         gamecontainer.appendChild(squarei);
     }
