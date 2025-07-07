@@ -1,6 +1,12 @@
-//Si se llena el tablero sin ganador no dice que esta lleno y que hay empate
 
+let player1 = null;
+let player2 = null;
+let player = null;
 
+const display=document.createElement("div")
+        display.id="game-display"
+        document.body.appendChild(display)
+        display.textContent="Welcome to Tic-Tac-Toe"
 function Game(){
     const gameboard = Array(9).fill(null);
 
@@ -18,7 +24,7 @@ function Game(){
     function play(posicion,marker,name){
         const jugada=parseInt(posicion)
         gameboard[jugada]=marker 
-        console.log(`El jugador ${name} juega en la posicion ${posicion}`)
+        display.textContent=`El jugador ${name} juega en la posicion ${posicion}`
         printGameboard()
     }
     function getGameboard(){
@@ -49,57 +55,92 @@ function Game(){
 
 function Playround(game){
     const gameboard=game.getGameboard()
-    function playround(player1,player2){
-        for (let i=0; i<9;i++){
+    function playround(playpos){
+
+        if(gameboard[playpos]===null){
+            player.play(playpos)
             const full = gameboard.every(cell => cell !== null)
-            if(full){
-                if(!winner){
-                    alert("El juego termino en empate")
-                }
-                alert("El juego termino")
-                break
+            const winner=game.checkWinner()
+            
+            if (winner){
+                display.textContent=`El jugador ${winner} ha ganado`               
+            }
+            else if(full){
+                display.textContent="El juego termino en empate"              
             }
             else{
-                console.log("MOSTRANDO PROMPT PARA PLAYER 1");
-                const play1pos=parseInt(prompt("Player 1: "))
-                if(gameboard[play1pos]===null){
-                    player1.play(play1pos)
-                    const winner=game.checkWinner()
-                    if (winner){
-                        alert(`El jugador ${winner} ha ganado`)
-                        break
-                    }
-                    
+                cambiarplayer()
+                display.textContent=`Turno de ${player.name}`
+            }
 
-                    console.log("MOSTRANDO PROMPT PARA PLAYER 2");
-                    const play2pos=parseInt(prompt("Player 2 "))
-                    if(gameboard[play2pos]===null){
-                        player2.play(play2pos)
-                        const winner=game.checkWinner()
-                    if (winner){
-                        alert(`El jugador ${winner} ha ganado`)
-                        break
-                    }
-                    }
-                    else{alert("Esa posicion ya esta ocupada")
-                        break
-                    }
-
-                }
-                else{alert("Esa posicion ya esta ocupada")
-                    break
-                }
-                }
-            }        
+        }
+        else{
+            display.textContent="Esa posicion ya esta ocupada"}                   
     }
 
     return{ playround }
+}
+function Display(){
+    function players(){
+        const input1=document.createElement("input")
+        input1.type="text";
+        input1.placeholder="Nombre de Player 1 (X)"
+
+        const boton1 = document.createElement("button");
+        boton1.textContent = "Guardar nombre";
+
+        document.body.appendChild(input1);
+        document.body.appendChild(boton1);
+
+        boton1.addEventListener("click", function() {
+            player1 = createPlayer(input1.value, "X");
+            display.textContent="Jugador 1 guardado correctamente"
+          });
+
+        const input2=document.createElement("input")
+        input2.type="text";
+        input2.placeholder="Nombre de Player 2 (O)"
+
+        const boton2 = document.createElement("button");
+        boton2.textContent = "Guardar nombre";
+
+        document.body.appendChild(input2);
+        document.body.appendChild(boton2);
+
+        boton2.addEventListener("click", function() {
+            player2 = createPlayer(input2.value, "O");
+            display.textContent="Jugador 2 guardado correctamente"
+            if (player1 && player2) {
+                player = Math.random() < 0.5 ? player1 : player2;
+                display.textContent += ` |Turno de ${player.name}`;
+            }
+          });  
+    }
+
+
+    function displayboard(){        
+        const gamecontainer=document.createElement("div")
+        gamecontainer.id="game-container"
+        document.body.appendChild(gamecontainer)
+
+        
+    for (let i=0;i<9;i++){
+        const squarei=document.createElement("div")
+        squarei.id="square";
+        squarei.addEventListener("click", () => {
+            let playpos=i;
+            playround1.playround(playpos)          
+        });
+        gamecontainer.appendChild(squarei);
+    }
+}
+return{displayboard,players}
 }
 
 
 
 const game=Game();
-const playround1=Playround(game);
+
 
 function createPlayer (name,marker){
     if(marker!=='X' && marker!=='O'){
@@ -116,12 +157,25 @@ function createPlayer (name,marker){
     return{name,marker,play}
 }
 }
-const jorge = createPlayer("Jorge", "O");
-const mario = createPlayer("Mario", "X")
 
-playround1.playround(jorge,mario)
+
+function cambiarplayer(){
+    player = (player===player1) ? player2:player1;
+    console.log("Estado actual: ", player)
+}
+
+
+const playround1=Playround(game);
+
+
+
 
 game.printGameboard()
+const displayInstance=Display();
+displayInstance.displayboard()
+displayInstance.players()
+
+
 
 
 /* 0|1|2
