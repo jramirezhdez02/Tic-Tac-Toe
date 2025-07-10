@@ -1,9 +1,17 @@
-//Revisar requerimientos restantes del proyecto, esta casi terminado. Funcion de reinicio para volver a jugar
+
 
 
 let player1 = null;
 let player2 = null;
 let player = null;
+
+function desactivarTablero() {
+    const squares = document.querySelectorAll(".square");
+    squares.forEach(square => {
+        square.style.pointerEvents = "none";  // 🔒 bloquea clics
+    });
+}
+
 
 const display=document.createElement("div")
         display.id="game-display"
@@ -64,23 +72,34 @@ function Playround(game){
     const gameboard=game.getGameboard()
     function playround(playpos){
 
+
         if(gameboard[playpos]===null){
             player.play(playpos)
             const full = gameboard.every(cell => cell !== null)
             const winner=game.checkWinner()
             
             if (winner){
+                desactivarTablero()
                 display.textContent=`El jugador ${winner} ha ganado`
                 const botonReset = document.createElement("button");
                 botonReset.textContent = "Reiniciar juego";
                 botonReset.addEventListener("click", () => {
                 location.reload(); // recarga toda la página
-});
-document.body.appendChild(botonReset);               
+                });
+                document.body.appendChild(botonReset);               
             }
             else if(full){
-                display.textContent="El juego termino en empate"              
+                desactivarTablero()
+                display.textContent="El juego termino en empate";
+                const botonReset = document.createElement("button");
+                botonReset.textContent = "Reiniciar juego";
+                botonReset.addEventListener("click", () => {
+                location.reload(); // recarga toda la página
+                });
+                document.body.appendChild(botonReset);               
             }
+                              
+            
             else{
                 cambiarplayer()
                 display.textContent=`Turno de ${player.name}`
@@ -139,7 +158,7 @@ function Display(){
         
     for (let i=0;i<9;i++){
         const squarei=document.createElement("div")
-        squarei.id="square";
+        squarei.classList.add("square");
         squarei.addEventListener("click", () => {
     let playpos = i;
     const currentPlayer = player;  // Captura el jugador actual ANTES de cambiarlo

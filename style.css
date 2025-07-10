@@ -19,7 +19,7 @@
     padding: 5px;
     font-size: x-large;
 }
-#square{
+.square{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -29,6 +29,9 @@
     width: 100px;
     background-color: rgb(219, 218, 218);
     cursor: pointer;
+}
+.square[style*="pointer-events: none"] {
+  cursor: not-allowed;
 }
 input[type="text"] {
     width: 250px;
